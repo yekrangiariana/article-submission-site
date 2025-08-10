@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UN-aligned content submission</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>UN-aligned content submission</h1>
+        <div id="content-type-header">
+          <div class="content-type-selection">
+            <button id="select-article-type" class="content-type-btn">Submit Article</button>
+            <button id="select-magazine-type" class="content-type-btn">Submit Gordian Magazine Issue</button>
+          </div>
+        </div>
+        <div class="progress-container" style="display: none;">
+          <div class="progress-bar" id="progress-bar"></div>
+          <div class="step-indicators">
+            <div class="step active" data-step="1">Front Matter</div>
+            <div class="step" data-step="2">Content</div>
+            <div class="step" data-step="3">Preview & Generate</div>
+          </div>
+        </div>
+      </header>
+
+      <div id="notification" class="notification"></div>
+
+      <main>
+        <!-- Content Type Selection Screen -->
+        <section id="content-type-selection" class="step-section active">
+          <h2>Select Content Type</h2>
+          <div class="content-type-options">
+            <div class="content-type-card" id="article-type-card">
+              <h3>Article Submission</h3>
+              <p>Submit a regular article with title, author, description, categories, tags, and content.</p>
+              <button class="primary-btn" id="select-article-btn">Create Article</button>
+            </div>
+            <div class="content-type-card" id="magazine-type-card">
+              <h3>Gordian Magazine Issue</h3>
+              <p>Create a magazine issue with title, date, issue number, tagline, article list, and editor's note.</p>
+              <button class="primary-btn" id="select-magazine-btn">Create Magazine Issue</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Article Submission Form -->
+        <div id="article-submission-form" style="display: none;">
+          <!-- Step 1: Front Matter -->
+          <section id="step-1-frontmatter" class="step-section">
+            <h2>Article Front Matter</h2>
+            <form id="frontmatter-form">
+            <div class="form-group">
+              <label for="title">Title*</label>
+              <input type="text" id="title" name="title" required />
+            </div>
+
+            <div class="form-group">
+              <label for="description"
+                >Description*
+                <span class="hint">(Standfirst, max 3 lines)</span></label
+              >
+              <textarea
+                id="description"
+                name="description"
+                rows="3"
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="author">Author*</label>
+              <input type="text" id="author" name="author" required />
+            </div>
+
+            <div class="form-group">
+              <label for="slug"
+                >Slug*
+                <span class="hint">(shortened title for URL)</span></label
+              >
+              <input type="text" id="slug" name="slug" required />
+              <button
+                type="button"
+                id="generate-slug-btn"
+                class="secondary-btn"
+              >
+                Generate from title
+              </button>
+            </div>
+
+            <div class="form-group">
+              <label
+                >Categories <span class="hint">(select multiple)</span></label
+              >
+              <div class="tag-container" id="categories-container">
+                <div class="tag-input-container">
+                  <input
+                    type="text"
+                    id="category-input"
+                    placeholder="Add category"
+                  />
+                  <button type="button" id="add-category-btn" class="add-btn">
+                    +
+                  </button>
+                  <div
+                    id="category-autocomplete"
+                    class="autocomplete-dropdown"
+                  ></div>
+                </div>
+                <div class="preset-container">
+                  <p class="preset-hint">Or choose from:</p>
+                  <div id="preset-categories" class="preset-options"></div>
+                </div>
+                <div class="tags-list" id="categories-list"></div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Tags <span class="hint">(select multiple)</span></label>
+              <div class="tag-container" id="tags-container">
+                <div class="tag-input-container">
+                  <input type="text" id="tag-input" placeholder="Add tag" />
+                  <button type="button" id="add-tag-btn" class="add-btn">
+                    +
+                  </button>
+                  <div
+                    id="tag-autocomplete"
+                    class="autocomplete-dropdown"
+                  ></div>
+                </div>
+                <div class="preset-container">
+                  <p class="preset-hint">Or choose from:</p>
+                  <div id="preset-tags" class="preset-options"></div>
+                </div>
+                <div class="tags-list" id="tags-list"></div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="image">Featured Image Path</label>
+              <input
+                type="text"
+                id="image"
+                name="image"
+                placeholder="/path/to/featured-image.jpg"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Article Style</label>
+              <div class="style-selection">
+                <div class="style-option">
+                  <label class="style-label">
+                    <input type="radio" name="style" value="1" checked />
+                    <div class="style-content">
+                      <div class="style-image">
+                        <img
+                          src="assets/style-1.jpg"
+                          alt="Normal Style Preview"
+                        />
+                      </div>
+                      <div class="style-name">Normal (Style 1)</div>
+                    </div>
+                  </label>
+                </div>
+                <div class="style-option">
+                  <label class="style-label">
+                    <input type="radio" name="style" value="2" />
+                    <div class="style-content">
+                      <div class="style-image">
+                        <img
+                          src="assets/style-2.jpg"
+                          alt="Special Style Preview"
+                        />
+                      </div>
+                      <div class="style-name">Special (Style 2)</div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                id="next-to-content-btn"
+                class="primary-btn"
+              >
+                Next: Article Content
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Step 2: Article Content -->
+        <section id="step-2-content" class="step-section">
+          <h2>Article Content</h2>
+          <div class="markdown-help">
+            <button type="button" id="markdown-help-btn" class="secondary-btn">
+              Markdown Help
+            </button>
+            <div id="markdown-help-content" class="markdown-help-content">
+              <h3>What is Markdown?</h3>
+              <p>Markdown is a lightweight markup language that lets you write formatted content using a plain text editor.</p>
+              
+              <h3>Markdown Basics</h3>
+              <ul>
+                <li><code># Heading 1</code></li>
+                <li><code>## Heading 2</code></li>
+                <li><code>**Bold Text**</code></li>
+                <li><code>*Italic Text*</code></li>
+                <li><code>[Link Text](url)</code></li>
+                <li><code>- List item</code></li>
+                <li><code>1. Numbered item</code></li>
+                <li><code>> Blockquote</code></li>
+                <li><code>```code block```</code></li>
+              </ul>
+
+              <h3>Converting from Google Docs to Markdown</h3>
+              <p>Google Docs has a built-in feature to export as Markdown: <a href="https://support.google.com/docs/answer/12014036?hl=en#zippy=%2Cexport-a-google-doc-as-markdown" target="_blank">Export a Google Doc as Markdown</a></p>
+              
+              <h3>Converting from Microsoft Word to Markdown</h3>
+              <p>Microsoft Word does not include a built-in feature to export documents directly as Markdown. Use an online converter like <a href="https://word2md.com/" target="_blank">Word to Markdown Converter</a></p>
+
+              <h3>Insert Images</h3>
+              <button type="button" class="insert-shortcode" data-type="normal">
+                Insert Normal Photo
+              </button>
+              <button type="button" class="insert-shortcode" data-type="large">
+                Insert Large Photo
+              </button>
+              <button type="button" class="insert-shortcode" data-type="xlarge">
+                Insert X-Large Photo
+              </button>
+              <button type="button" class="insert-shortcode" data-type="custom">
+                Insert Custom Photo
+              </button>
+            </div>
+          </div>
+
+          <!-- Article Statistics Summary -->
+          <div class="article-stats" id="article-stats">
+            <div class="stats-container">
+              <div class="stat-item">
+                <span class="stat-number" id="word-count">0</span>
+                <span class="stat-label">Words</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number" id="heading-count">0</span>
+                <span class="stat-label">Headings</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number" id="link-count">0</span>
+                <span class="stat-label">Links</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="article-content"
+              >Write your article in Markdown format*</label
+            >
+            <textarea id="article-content" rows="15" required></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              id="back-to-frontmatter-btn"
+              class="secondary-btn"
+            >
+              Back to Front Matter
+            </button>
+            <button type="button" id="next-to-preview-btn" class="primary-btn">
+              Next: Preview
+            </button>
+          </div>
+        </section>
+
+        <!-- Step 3: Preview and Generate -->
+        <section id="step-3-preview" class="step-section">
+          <h2>Preview & Generate Article</h2>
+
+          <div class="preview-container">
+            <h3>Article Preview</h3>
+            <pre id="markdown-preview"></pre>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              id="back-to-content-btn"
+              class="secondary-btn"
+            >
+              Back to Article Content
+            </button>
+            <div class="action-buttons">
+              <button
+                type="button"
+                id="copy-to-clipboard-btn"
+                class="primary-btn"
+              >
+                Copy to Clipboard
+              </button>
+              <button
+                type="button"
+                id="download-article-btn"
+                class="primary-btn"
+              >
+                Download article.md
+              </button>
+              <button
+                type="button"
+                id="email-to-editor-btn"
+                class="primary-btn"
+              >
+                Email to Editor
+              </button>
+            </div>
+          </div>
+        </section>
+        </div>
+        
+        <!-- Magazine Issue Submission Form -->
+        <div id="magazine-submission-form" style="display: none;">
+          <!-- Step 1: Magazine Front Matter -->
+          <section id="magazine-step-1-frontmatter" class="step-section">
+            <h2>Magazine Issue Front Matter</h2>
+            <form id="magazine-frontmatter-form">
+              <div class="form-group">
+                <label for="magazine-title">Title*</label>
+                <input type="text" id="magazine-title" name="magazine-title" required />
+              </div>
+
+              <div class="form-group">
+                <label for="magazine-date">Date* <span class="hint">(Format: YYYY-MM-DD)</span></label>
+                <input type="date" id="magazine-date" name="magazine-date" required />
+              </div>
+
+              <div class="form-group">
+                <label for="magazine-issue-number">Issue Number* <span class="hint">(Numbers only)</span></label>
+                <input type="number" id="magazine-issue-number" name="magazine-issue-number" min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required />
+              </div>
+
+              <div class="form-group">
+                <label for="magazine-slug">Slug* <span class="hint">(Will be auto-generated as "issue-X")</span></label>
+                <input type="text" id="magazine-slug" name="magazine-slug" required readonly />
+              </div>
+
+              <div class="form-group">
+                <label for="magazine-description">Description*</label>
+                <textarea id="magazine-description" name="magazine-description" rows="3" required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="magazine-tagline">Tagline</label>
+                <input type="text" id="magazine-tagline" name="magazine-tagline" />
+              </div>
+
+              <div class="form-group">
+                <label>Article List <span class="hint">(Add article slugs included in this issue)</span></label>
+                <div class="tag-container" id="article-list-container">
+                  <div class="tag-input-container">
+                    <input type="text" id="article-input" placeholder="Add article slug (e.g., my-article-name)" />
+                    <button type="button" id="add-article-btn" class="add-btn">+</button>
+                  </div>
+                  <div class="info-message">Please enter the slugs of articles, not their titles</div>
+                  <div class="tags-list" id="articles-list"></div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="magazine-image">Magazine Cover <span class="hint">(Path to cover image)</span></label>
+                <input
+                  type="text"
+                  id="magazine-image"
+                  name="magazine-image"
+                  placeholder="/path/to/magazine-cover.jpg"
+                />
+              </div>
+
+              <div class="form-actions">
+                <button
+                  type="button"
+                  id="magazine-next-to-content-btn"
+                  class="primary-btn"
+                >
+                  Next: Editor's Note
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <!-- Step 2: Magazine Content -->
+          <section id="magazine-step-2-content" class="step-section">
+            <h2>Editor's Note</h2>
+            <div class="markdown-help">
+              <button type="button" id="magazine-markdown-help-btn" class="secondary-btn">
+                Markdown Help
+              </button>
+              <div id="magazine-markdown-help-content" class="markdown-help-content">
+                <h3>What is Markdown?</h3>
+                <p>Markdown is a lightweight markup language that lets you write formatted content using a plain text editor.</p>
+                
+                <h3>Markdown Basics</h3>
+                <ul>
+                  <li><code># Heading 1</code></li>
+                  <li><code>## Heading 2</code></li>
+                  <li><code>**Bold Text**</code></li>
+                  <li><code>*Italic Text*</code></li>
+                  <li><code>[Link Text](url)</code></li>
+                  <li><code>- List item</code></li>
+                  <li><code>1. Numbered item</code></li>
+                  <li><code>> Blockquote</code></li>
+                  <li><code>```code block```</code></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="article-stats" id="magazine-article-stats">
+              <div class="stats-container">
+                <div class="stat-item">
+                  <span class="stat-number" id="magazine-word-count">0</span>
+                  <span class="stat-label">Words</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="magazine-content">Write your editor's note in Markdown format*</label>
+              <textarea id="magazine-content" rows="15" required></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                id="magazine-back-to-frontmatter-btn"
+                class="secondary-btn"
+              >
+                Back to Front Matter
+              </button>
+              <button type="button" id="magazine-next-to-preview-btn" class="primary-btn">
+                Next: Preview
+              </button>
+            </div>
+          </section>
+
+          <!-- Step 3: Magazine Preview and Generate -->
+          <section id="magazine-step-3-preview" class="step-section">
+            <h2>Preview & Generate Magazine Issue</h2>
+
+            <div class="preview-container">
+              <h3>Magazine Issue Preview</h3>
+              <pre id="magazine-markdown-preview"></pre>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                id="magazine-back-to-content-btn"
+                class="secondary-btn"
+              >
+                Back to Editor's Note
+              </button>
+              <div class="action-buttons">
+                <button
+                  type="button"
+                  id="magazine-copy-to-clipboard-btn"
+                  class="primary-btn"
+                >
+                  Copy to Clipboard
+                </button>
+                <button
+                  type="button"
+                  id="magazine-download-btn"
+                  class="primary-btn"
+                >
+                  Download magazine-issue.md
+                </button>
+                <button
+                  type="button"
+                  id="magazine-email-to-editor-btn"
+                  class="primary-btn"
+                >
+                  Email to Editor
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modal for photo shortcode creation -->
+    <div id="photo-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3 id="modal-title">Insert Photo</h3>
+
+        <form id="photo-shortcode-form">
+          <div class="form-group">
+            <label for="photo-src">Image Path*</label>
+            <input
+              type="text"
+              id="photo-src"
+              placeholder="/path/to/image.jpg"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="photo-caption">Caption</label>
+            <input
+              type="text"
+              id="photo-caption"
+              placeholder="Describe this image"
+            />
+          </div>
+
+          <div class="form-group" id="custom-width-group" style="display: none">
+            <label for="photo-width">Width (%)</label>
+            <input
+              type="number"
+              id="photo-width"
+              min="10"
+              max="100"
+              value="40"
+            />
+          </div>
+
+          <div class="form-actions">
+            <button type="button" id="insert-photo-btn" class="primary-btn">
+              Insert
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/app.js"></script>
+  </body>
+</html>
