@@ -33,8 +33,7 @@
 }
 
 body {
-  font-family:
-    "Roboto Mono", "SF Mono", Menlo, Monaco, "Courier New", monospace;
+  font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
