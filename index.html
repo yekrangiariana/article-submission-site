@@ -1,544 +1,495 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UN-aligned content submission</title>
-    <link rel="stylesheet" href="css/styles.css" />
+    <title>Submission Site</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?v=20260221" />
   </head>
   <body>
-    <div class="container">
-      <header>
-        <h1>UN-aligned content submission</h1>
-        <div id="content-type-header">
-          <div class="content-type-selection">
-            <button id="select-article-type" class="content-type-btn">Submit Article</button>
-            <button id="select-magazine-type" class="content-type-btn">Submit Gordian Magazine Issue</button>
-          </div>
+    <header>
+      <img src="logo.png" alt="Essential Stories" class="header-logo" />
+      <h1 id="site-mode-title">Submission Site</h1>
+      <div class="mode-switch-wrap">
+        <div class="mode-switch-label">Submission Mode</div>
+        <div class="mode-switch" aria-label="Submission mode">
+          <button type="button" class="mode-btn active" id="mode-general-btn">
+            <span class="mode-name">Submission Site</span>
+            <span class="mode-desc">For regular article submissions</span>
+          </button>
+          <button type="button" class="mode-btn" id="mode-essentials-btn">
+            <span class="mode-name">Essentials Stories</span>
+            <span class="mode-desc">For weekly essentials stories</span>
+          </button>
         </div>
-        <div class="progress-container" style="display: none;">
-          <div class="progress-bar" id="progress-bar"></div>
-          <div class="step-indicators">
-            <div class="step active" data-step="1">Front Matter</div>
-            <div class="step" data-step="2">Content</div>
-            <div class="step" data-step="3">Preview & Generate</div>
-          </div>
-        </div>
-      </header>
+      </div>
+    </header>
 
-      <div id="notification" class="notification"></div>
-
-      <main>
-        <!-- Content Type Selection Screen -->
-        <section id="content-type-selection" class="step-section active">
-          <h2>Select Content Type</h2>
-          <div class="content-type-options">
-            <div class="content-type-card" id="article-type-card">
-              <h3>Article Submission</h3>
-              <p>Submit a regular article with title, author, description, categories, tags, and content.</p>
-              <button class="primary-btn" id="select-article-btn">Create Article</button>
-            </div>
-            <div class="content-type-card" id="magazine-type-card">
-              <h3>Gordian Magazine Issue</h3>
-              <p>Create a magazine issue with title, date, issue number, tagline, article list, and editor's note.</p>
-              <button class="primary-btn" id="select-magazine-btn">Create Magazine Issue</button>
-            </div>
-          </div>
-        </section>
-
-        <!-- Article Submission Form -->
-        <div id="article-submission-form" style="display: none;">
-          <!-- Step 1: Front Matter -->
-          <section id="step-1-frontmatter" class="step-section">
-            <h2>Article Front Matter</h2>
-            <form id="frontmatter-form">
-            <div class="form-group">
-              <label for="title">Title*</label>
-              <input type="text" id="title" name="title" required />
-            </div>
-
-            <div class="form-group">
-              <label for="description"
-                >Description*
-                <span class="hint">(Standfirst, max 3 lines)</span></label
-              >
-              <textarea
-                id="description"
-                name="description"
-                rows="3"
-                required
-              ></textarea>
-            </div>
-
-            <div class="form-group">
-              <label for="author">Author*</label>
-              <input type="text" id="author" name="author" required />
-            </div>
-
-            <div class="form-group">
-              <label for="slug"
-                >Slug*
-                <span class="hint">(shortened title for URL)</span></label
-              >
-              <input type="text" id="slug" name="slug" required />
-              <button
-                type="button"
-                id="generate-slug-btn"
-                class="secondary-btn"
-              >
-                Generate from title
-              </button>
-            </div>
-
-            <div class="form-group">
-              <label
-                >Categories <span class="hint">(select multiple)</span></label
-              >
-              <div class="tag-container" id="categories-container">
-                <div class="tag-input-container">
-                  <input
-                    type="text"
-                    id="category-input"
-                    placeholder="Add category"
-                  />
-                  <button type="button" id="add-category-btn" class="add-btn">
-                    +
-                  </button>
-                  <div
-                    id="category-autocomplete"
-                    class="autocomplete-dropdown"
-                  ></div>
-                </div>
-                <div class="preset-container">
-                  <p class="preset-hint">Or choose from:</p>
-                  <div id="preset-categories" class="preset-options"></div>
-                </div>
-                <div class="tags-list" id="categories-list"></div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label>Tags <span class="hint">(select multiple)</span></label>
-              <div class="tag-container" id="tags-container">
-                <div class="tag-input-container">
-                  <input type="text" id="tag-input" placeholder="Add tag" />
-                  <button type="button" id="add-tag-btn" class="add-btn">
-                    +
-                  </button>
-                  <div
-                    id="tag-autocomplete"
-                    class="autocomplete-dropdown"
-                  ></div>
-                </div>
-                <div class="preset-container">
-                  <p class="preset-hint">Or choose from:</p>
-                  <div id="preset-tags" class="preset-options"></div>
-                </div>
-                <div class="tags-list" id="tags-list"></div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="image">Featured Image Path</label>
-              <input
-                type="text"
-                id="image"
-                name="image"
-                placeholder="/path/to/featured-image.jpg"
-              />
-            </div>
-
-            <div class="form-group">
-              <label>Article Style</label>
-              <div class="style-selection">
-                <div class="style-option">
-                  <label class="style-label">
-                    <input type="radio" name="style" value="1" checked />
-                    <div class="style-content">
-                      <div class="style-image">
-                        <img
-                          src="assets/style-1.jpg"
-                          alt="Normal Style Preview"
-                        />
-                      </div>
-                      <div class="style-name">Normal (Style 1)</div>
-                    </div>
-                  </label>
-                </div>
-                <div class="style-option">
-                  <label class="style-label">
-                    <input type="radio" name="style" value="2" />
-                    <div class="style-content">
-                      <div class="style-image">
-                        <img
-                          src="assets/style-2.jpg"
-                          alt="Special Style Preview"
-                        />
-                      </div>
-                      <div class="style-name">Special (Style 2)</div>
-                    </div>
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-actions">
-              <button
-                type="button"
-                id="next-to-content-btn"
-                class="primary-btn"
-              >
-                Next: Article Content
-              </button>
-            </div>
-          </form>
-        </section>
-
-        <!-- Step 2: Article Content -->
-        <section id="step-2-content" class="step-section">
-          <h2>Article Content</h2>
-          <div class="markdown-help">
-            <button type="button" id="markdown-help-btn" class="secondary-btn">
-              Markdown Help
-            </button>
-            <div id="markdown-help-content" class="markdown-help-content">
-              <h3>What is Markdown?</h3>
-              <p>Markdown is a lightweight markup language that lets you write formatted content using a plain text editor.</p>
-              
-              <h3>Markdown Basics</h3>
-              <ul>
-                <li><code># Heading 1</code></li>
-                <li><code>## Heading 2</code></li>
-                <li><code>**Bold Text**</code></li>
-                <li><code>*Italic Text*</code></li>
-                <li><code>[Link Text](url)</code></li>
-                <li><code>- List item</code></li>
-                <li><code>1. Numbered item</code></li>
-                <li><code>> Blockquote</code></li>
-                <li><code>```code block```</code></li>
-              </ul>
-
-              <h3>Converting from Google Docs to Markdown</h3>
-              <p>Google Docs has a built-in feature to export as Markdown: <a href="https://support.google.com/docs/answer/12014036?hl=en#zippy=%2Cexport-a-google-doc-as-markdown" target="_blank">Export a Google Doc as Markdown</a></p>
-              
-              <h3>Converting from Microsoft Word to Markdown</h3>
-              <p>Microsoft Word does not include a built-in feature to export documents directly as Markdown. Use an online converter like <a href="https://word2md.com/" target="_blank">Word to Markdown Converter</a></p>
-
-              <h3>Insert Images</h3>
-              <button type="button" class="insert-shortcode" data-type="normal">
-                Insert Normal Photo
-              </button>
-              <button type="button" class="insert-shortcode" data-type="large">
-                Insert Large Photo
-              </button>
-              <button type="button" class="insert-shortcode" data-type="xlarge">
-                Insert X-Large Photo
-              </button>
-              <button type="button" class="insert-shortcode" data-type="custom">
-                Insert Custom Photo
-              </button>
-            </div>
-          </div>
-
-          <!-- Article Statistics Summary -->
-          <div class="article-stats" id="article-stats">
-            <div class="stats-container">
-              <div class="stat-item">
-                <span class="stat-number" id="word-count">0</span>
-                <span class="stat-label">Words</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number" id="heading-count">0</span>
-                <span class="stat-label">Headings</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number" id="link-count">0</span>
-                <span class="stat-label">Links</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="article-content"
-              >Write your article in Markdown format*</label
-            >
-            <textarea id="article-content" rows="15" required></textarea>
-          </div>
-
-          <div class="form-actions">
-            <button
-              type="button"
-              id="back-to-frontmatter-btn"
-              class="secondary-btn"
-            >
-              Back to Front Matter
-            </button>
-            <button type="button" id="next-to-preview-btn" class="primary-btn">
-              Next: Preview
-            </button>
-          </div>
-        </section>
-
-        <!-- Step 3: Preview and Generate -->
-        <section id="step-3-preview" class="step-section">
-          <h2>Preview & Generate Article</h2>
-
-          <div class="preview-container">
-            <h3>Article Preview</h3>
-            <pre id="markdown-preview"></pre>
-          </div>
-
-          <div class="form-actions">
-            <button
-              type="button"
-              id="back-to-content-btn"
-              class="secondary-btn"
-            >
-              Back to Article Content
-            </button>
-            <div class="action-buttons">
-              <button
-                type="button"
-                id="copy-to-clipboard-btn"
-                class="primary-btn"
-              >
-                Copy to Clipboard
-              </button>
-              <button
-                type="button"
-                id="download-article-btn"
-                class="primary-btn"
-              >
-                Download article.md
-              </button>
-              <button
-                type="button"
-                id="email-to-editor-btn"
-                class="primary-btn"
-              >
-                Email to Editor
-              </button>
-            </div>
-          </div>
-        </section>
-        </div>
-        
-        <!-- Magazine Issue Submission Form -->
-        <div id="magazine-submission-form" style="display: none;">
-          <!-- Step 1: Magazine Front Matter -->
-          <section id="magazine-step-1-frontmatter" class="step-section">
-            <h2>Magazine Issue Front Matter</h2>
-            <form id="magazine-frontmatter-form">
-              <div class="form-group">
-                <label for="magazine-title">Title*</label>
-                <input type="text" id="magazine-title" name="magazine-title" required />
-              </div>
-
-              <div class="form-group">
-                <label for="magazine-date">Date* <span class="hint">(Format: YYYY-MM-DD)</span></label>
-                <input type="date" id="magazine-date" name="magazine-date" required />
-              </div>
-
-              <div class="form-group">
-                <label for="magazine-issue-number">Issue Number* <span class="hint">(Numbers only)</span></label>
-                <input type="number" id="magazine-issue-number" name="magazine-issue-number" min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required />
-              </div>
-
-              <div class="form-group">
-                <label for="magazine-slug">Slug* <span class="hint">(Will be auto-generated as "issue-X")</span></label>
-                <input type="text" id="magazine-slug" name="magazine-slug" required readonly />
-              </div>
-
-              <div class="form-group">
-                <label for="magazine-description">Description*</label>
-                <textarea id="magazine-description" name="magazine-description" rows="3" required></textarea>
-              </div>
-
-              <div class="form-group">
-                <label for="magazine-tagline">Tagline</label>
-                <input type="text" id="magazine-tagline" name="magazine-tagline" />
-              </div>
-
-              <div class="form-group">
-                <label>Article List <span class="hint">(Add article slugs included in this issue)</span></label>
-                <div class="tag-container" id="article-list-container">
-                  <div class="tag-input-container">
-                    <input type="text" id="article-input" placeholder="Add article slug (e.g., my-article-name)" />
-                    <button type="button" id="add-article-btn" class="add-btn">+</button>
-                  </div>
-                  <div class="info-message">Please enter the slugs of articles, not their titles</div>
-                  <div class="tags-list" id="articles-list"></div>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="magazine-image">Magazine Cover <span class="hint">(Path to cover image)</span></label>
-                <input
-                  type="text"
-                  id="magazine-image"
-                  name="magazine-image"
-                  placeholder="/path/to/magazine-cover.jpg"
-                />
-              </div>
-
-              <div class="form-actions">
-                <button
-                  type="button"
-                  id="magazine-next-to-content-btn"
-                  class="primary-btn"
-                >
-                  Next: Editor's Note
-                </button>
-              </div>
-            </form>
-          </section>
-
-          <!-- Step 2: Magazine Content -->
-          <section id="magazine-step-2-content" class="step-section">
-            <h2>Editor's Note</h2>
-            <div class="markdown-help">
-              <button type="button" id="magazine-markdown-help-btn" class="secondary-btn">
-                Markdown Help
-              </button>
-              <div id="magazine-markdown-help-content" class="markdown-help-content">
-                <h3>What is Markdown?</h3>
-                <p>Markdown is a lightweight markup language that lets you write formatted content using a plain text editor.</p>
-                
-                <h3>Markdown Basics</h3>
-                <ul>
-                  <li><code># Heading 1</code></li>
-                  <li><code>## Heading 2</code></li>
-                  <li><code>**Bold Text**</code></li>
-                  <li><code>*Italic Text*</code></li>
-                  <li><code>[Link Text](url)</code></li>
-                  <li><code>- List item</code></li>
-                  <li><code>1. Numbered item</code></li>
-                  <li><code>> Blockquote</code></li>
-                  <li><code>```code block```</code></li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="article-stats" id="magazine-article-stats">
-              <div class="stats-container">
-                <div class="stat-item">
-                  <span class="stat-number" id="magazine-word-count">0</span>
-                  <span class="stat-label">Words</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="magazine-content">Write your editor's note in Markdown format*</label>
-              <textarea id="magazine-content" rows="15" required></textarea>
-            </div>
-
-            <div class="form-actions">
-              <button
-                type="button"
-                id="magazine-back-to-frontmatter-btn"
-                class="secondary-btn"
-              >
-                Back to Front Matter
-              </button>
-              <button type="button" id="magazine-next-to-preview-btn" class="primary-btn">
-                Next: Preview
-              </button>
-            </div>
-          </section>
-
-          <!-- Step 3: Magazine Preview and Generate -->
-          <section id="magazine-step-3-preview" class="step-section">
-            <h2>Preview & Generate Magazine Issue</h2>
-
-            <div class="preview-container">
-              <h3>Magazine Issue Preview</h3>
-              <pre id="magazine-markdown-preview"></pre>
-            </div>
-
-            <div class="form-actions">
-              <button
-                type="button"
-                id="magazine-back-to-content-btn"
-                class="secondary-btn"
-              >
-                Back to Editor's Note
-              </button>
-              <div class="action-buttons">
-                <button
-                  type="button"
-                  id="magazine-copy-to-clipboard-btn"
-                  class="primary-btn"
-                >
-                  Copy to Clipboard
-                </button>
-                <button
-                  type="button"
-                  id="magazine-download-btn"
-                  class="primary-btn"
-                >
-                  Download magazine-issue.md
-                </button>
-                <button
-                  type="button"
-                  id="magazine-email-to-editor-btn"
-                  class="primary-btn"
-                >
-                  Email to Editor
-                </button>
-              </div>
-            </div>
-          </section>
-        </div>
-      </main>
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div class="progress-labels" id="progressLabels"></div>
     </div>
 
-    <!-- Modal for photo shortcode creation -->
-    <div id="photo-modal" class="modal">
-      <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <h3 id="modal-title">Insert Photo</h3>
+    <!-- Card -->
+    <div class="card">
+      <!-- ── Step 1: Title & Description ── -->
+      <div class="step active" id="step-1">
+        <div class="step-header">
+          <div class="step-badge">Step 1 of 6</div>
+          <div class="step-title">Headline &amp; Summary</div>
+          <div class="step-desc">
+            Set the core editorial metadata: a clear headline and a concise
+            summary for readers and search.
+          </div>
+        </div>
 
-        <form id="photo-shortcode-form">
-          <div class="form-group">
-            <label for="photo-src">Image Path*</label>
+        <div class="field">
+          <label for="title">Headline <span class="req">*</span></label>
+          <input
+            type="text"
+            id="title"
+            placeholder="e.g. Is the ceasefire already collapsing?"
+            autocomplete="off"
+          />
+          <div class="field-error" id="title-err">Please enter a headline.</div>
+        </div>
+
+        <div class="field">
+          <label for="description">Summary <span class="req">*</span></label>
+          <textarea
+            id="description"
+            placeholder="e.g. Three NATO member states requested an emergency summit after satellite imagery showed major troop movements within 40km of the border."
+            style="min-height: 100px"
+          ></textarea>
+          <div class="field-error" id="desc-err">Please add a summary.</div>
+        </div>
+
+        <input type="hidden" id="slug" />
+
+        <div class="field">
+          <div class="mode-general-only">
+            <label for="author"
+              >Author(s) <span class="req">*</span>
+              <span class="hint"
+                >Enter multiple authors as a comma-separated list.</span
+              ></label
+            >
             <input
               type="text"
-              id="photo-src"
-              placeholder="/path/to/image.jpg"
-              required
+              id="author"
+              placeholder="e.g. Ariana Yekrangi, John Doe"
+              autocomplete="off"
             />
+            <div class="field-error" id="author-err">
+              Please enter at least one author.
+            </div>
           </div>
+        </div>
 
-          <div class="form-group">
-            <label for="photo-caption">Caption</label>
-            <input
-              type="text"
-              id="photo-caption"
-              placeholder="Describe this image"
-            />
+        <div class="field">
+          <label for="dateField"
+            >Publication Date
+            <span class="hint">Pre-filled with the current date and time.</span>
+          </label>
+          <input type="datetime-local" id="dateField" />
+        </div>
+
+        <div class="nav-row">
+          <div></div>
+          <button class="btn btn-primary" id="step1-next-btn" onclick="goTo(2)">
+            Next → Taxonomy
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Step 2: Country ── -->
+      <div class="step" id="step-2">
+        <div class="step-header">
+          <div class="step-badge">Step 2 of 6</div>
+          <div class="step-title" id="step2-title">Country &amp; Taxonomy</div>
+          <div class="step-desc" id="step2-desc">
+            Add country context and taxonomy metadata so the article can be
+            grouped and discovered correctly.
           </div>
+        </div>
 
-          <div class="form-group" id="custom-width-group" style="display: none">
-            <label for="photo-width">Width (%)</label>
-            <input
-              type="number"
-              id="photo-width"
-              min="10"
-              max="100"
-              value="40"
-            />
-          </div>
-
-          <div class="form-actions">
-            <button type="button" id="insert-photo-btn" class="primary-btn">
-              Insert
+        <div class="field">
+          <p class="toggle-prompt">Is this story primarily about a country?</p>
+          <div class="yes-no-wrap" id="countrySelect">
+            <button
+              type="button"
+              class="yes-no-btn"
+              onclick="setHasCountry(true)"
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              class="yes-no-btn"
+              onclick="setHasCountry(false)"
+            >
+              No
             </button>
           </div>
-        </form>
+          <input type="hidden" id="hasCountry" />
+        </div>
+
+        <div class="collapsible" id="countrySection">
+          <div class="field" style="margin-top: 14px">
+            <label for="countryName"
+              >Countries <span class="req">*</span>
+              <span class="hint"
+                >Enter multiple countries as comma-separated values (e.g. Sudan,
+                Ukraine)</span
+              >
+            </label>
+            <input
+              type="text"
+              id="countryName"
+              placeholder="e.g. Sudan, Ukraine, Yemen"
+              autocomplete="off"
+            />
+            <div class="field-error" id="country-err">
+              Please enter at least one country.
+            </div>
+          </div>
+        </div>
+
+        <div class="mode-general-only">
+          <div class="field" style="margin-top: 14px">
+            <label for="generalCategories"
+              >Categories
+              <span class="hint"
+                >Comma-separated values (e.g. Human Rights, Technology)</span
+              ></label
+            >
+            <input
+              type="text"
+              id="generalCategories"
+              placeholder="e.g. Human Rights, Policy"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="field">
+            <label for="generalTags"
+              >Tags
+              <span class="hint"
+                >Comma-separated values (e.g. United States, UN Security
+                Council)</span
+              ></label
+            >
+            <input
+              type="text"
+              id="generalTags"
+              placeholder="e.g. United States, Diplomacy"
+              autocomplete="off"
+            />
+          </div>
+        </div>
+
+        <div class="nav-row">
+          <button class="btn btn-ghost" onclick="goTo(1)">← Back</button>
+          <button class="btn btn-primary" onclick="goTo(3)">
+            Next → Article Draft
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Step 3: Post Content ── -->
+      <div class="step" id="step-3">
+        <div class="step-header">
+          <div class="step-badge">Step 3 of 6</div>
+          <div class="step-title">Article Draft</div>
+          <div class="step-desc">
+            Write or paste the full article body in markdown format.
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="content">Article Body <span class="req">*</span></label>
+          <textarea
+            id="content"
+            class="tall"
+            placeholder="Write or paste the full article here.&#10;&#10;Use markdown for structure and emphasis: ## headings, **bold**, *italic*, and links."
+          ></textarea>
+          <div class="field-error" id="content-err">
+            Please add the article body.
+          </div>
+        </div>
+
+        <div class="nav-row">
+          <button class="btn btn-ghost" onclick="goTo(2)">← Back</button>
+          <button class="btn btn-primary" id="step3-next-btn" onclick="goTo(4)">
+            Next → Quotes
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Step 4: Quotes ── -->
+      <div class="step" id="step-4">
+        <div class="step-header">
+          <div class="step-badge">Step 4 of 6</div>
+          <div class="step-title">Highlighted Quotes</div>
+          <div class="step-desc">
+            Add optional pull quotes that reinforce the core narrative.
+          </div>
+        </div>
+
+        <div class="field">
+          <p class="toggle-prompt">
+            Would you like to include highlighted quotes?
+          </p>
+          <div class="yes-no-wrap" id="quotesSelect">
+            <button
+              type="button"
+              class="yes-no-btn"
+              onclick="setHasQuotes(true)"
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              class="yes-no-btn"
+              onclick="setHasQuotes(false)"
+            >
+              No
+            </button>
+          </div>
+          <input type="hidden" id="hasQuotes" />
+        </div>
+
+        <div class="collapsible" id="quotesSection">
+          <div style="margin-top: 14px">
+            <div class="item-list" id="quoteList"></div>
+            <button type="button" class="add-btn" onclick="addQuote()">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add another quote
+            </button>
+          </div>
+        </div>
+
+        <div class="nav-row">
+          <button class="btn btn-ghost" onclick="goTo(3)">← Back</button>
+          <button class="btn btn-primary" onclick="goTo(5)">Next → Quiz</button>
+        </div>
+      </div>
+
+      <!-- ── Step 5: Quiz ── -->
+      <div class="step" id="step-5">
+        <div class="step-header">
+          <div class="step-badge">Step 5 of 6</div>
+          <div class="step-title">Quiz</div>
+          <div class="step-desc">
+            Add an optional, fact-based quiz only when the article clearly
+            supports it. Each question must be self-contained and make sense on
+            its own.
+          </div>
+        </div>
+
+        <div class="field">
+          <p class="toggle-prompt">Would you like to include a quiz?</p>
+          <div class="yes-no-wrap" id="quizSelect">
+            <button type="button" class="yes-no-btn" onclick="setHasQuiz(true)">
+              Yes
+            </button>
+            <button
+              type="button"
+              class="yes-no-btn"
+              onclick="setHasQuiz(false)"
+            >
+              No
+            </button>
+          </div>
+          <input type="hidden" id="hasQuiz" />
+        </div>
+
+        <div class="collapsible" id="quizSection">
+          <div style="margin-top: 14px">
+            <div class="item-list" id="quizList"></div>
+            <button type="button" class="add-btn" onclick="addQuestion()">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add another question
+            </button>
+          </div>
+        </div>
+
+        <div class="nav-row">
+          <button class="btn btn-ghost" onclick="goTo(4)">← Back</button>
+          <button class="btn btn-primary" onclick="goTo(6)">
+            Next → Review &amp; Send
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Step 6: Review & Send ── -->
+      <div class="step" id="step-6">
+        <div class="step-header">
+          <div class="step-badge">Step 6 of 6</div>
+          <div class="step-title">Review &amp; Send</div>
+          <div class="step-desc">
+            Review the generated markdown, run the checklist, then export or
+            send.
+          </div>
+        </div>
+
+        <div class="tv-monitor">
+          <div class="tv-screen">
+            <div class="output-block" id="outputBlock"></div>
+
+            <!-- Checklist Modal inside TV -->
+            <div id="checklistModal" class="tv-checklist" style="display: none">
+              <div class="tv-checklist-header">
+                <h2>Editorial Checklist</h2>
+                <button
+                  type="button"
+                  class="tv-close"
+                  onclick="closeChecklistModal()"
+                >
+                  ×
+                </button>
+              </div>
+              <div class="tv-checklist-body" id="checklistModalBody"></div>
+            </div>
+
+            <!-- Action Popup inside TV -->
+            <div id="actionModal" class="tv-checklist" style="display: none">
+              <div class="tv-checklist-header">
+                <h2 id="actionModalTitle">Submission Status</h2>
+                <button
+                  type="button"
+                  class="tv-close"
+                  onclick="closeActionModal()"
+                >
+                  ×
+                </button>
+              </div>
+              <div class="tv-checklist-body" id="actionModalBody">
+                <div class="tv-action-message"></div>
+              </div>
+            </div>
+          </div>
+          <div class="tv-controls">
+            <button
+              class="tv-btn"
+              onclick="copyOutput()"
+              title="Copy markdown to clipboard"
+            >
+              <svg
+                width="12"
+                height="12"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"
+                />
+                <path
+                  d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"
+                />
+              </svg>
+              COPY
+            </button>
+            <button
+              class="tv-btn"
+              onclick="sendEmail()"
+              title="Open email client with draft"
+            >
+              <svg
+                width="12"
+                height="12"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"
+                />
+              </svg>
+              EMAIL
+            </button>
+            <button
+              class="tv-btn"
+              onclick="openChecklistModal()"
+              title="Open editorial checklist"
+            >
+              <svg
+                width="12"
+                height="12"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"
+                />
+                <path
+                  d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"
+                />
+              </svg>
+              CHECKLIST
+            </button>
+            <button
+              class="tv-btn tv-btn-danger"
+              onclick="resetForm()"
+              title="Reset form and start over"
+            >
+              <svg
+                width="12"
+                height="12"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"
+                />
+                <path
+                  d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"
+                />
+              </svg>
+              RESET
+            </button>
+          </div>
+          <div class="tv-stand"></div>
+        </div>
+
+        <div class="nav-row" style="margin-top: 16px">
+          <button class="btn btn-ghost" id="step6-back-btn" onclick="goTo(5)">
+            ← Back
+          </button>
+          <div></div>
+        </div>
       </div>
     </div>
+    <!-- /card -->
 
-    <script src="js/app.js"></script>
+    <div id="toast">Copied!</div>
+
+    <script src="app.js?v=20260221"></script>
   </body>
 </html>
