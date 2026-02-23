@@ -232,6 +232,39 @@ function renderProgress() {
       return `<button type="button" class="progress-label ${cls}" onclick="goTo(${stepNumber})">${prefix}${n}</button>`;
     })
     .join("");
+
+  ensureActiveProgressVisible();
+}
+
+function ensureActiveProgressVisible() {
+  if (!window.matchMedia("(max-width: 1100px)").matches) return;
+
+  const progressWrap = document.querySelector(".progress-wrap");
+  const activeLabel = document.querySelector(
+    "#progressLabels .progress-label.active",
+  );
+  if (!progressWrap || !activeLabel) return;
+
+  const activeStart = activeLabel.offsetLeft;
+  const activeEnd = activeStart + activeLabel.offsetWidth;
+  const viewportStart = progressWrap.scrollLeft;
+  const viewportEnd = viewportStart + progressWrap.clientWidth;
+  const edgePadding = 12;
+
+  if (
+    activeStart >= viewportStart + edgePadding &&
+    activeEnd <= viewportEnd - edgePadding
+  ) {
+    return;
+  }
+
+  const centeredLeft =
+    activeStart - (progressWrap.clientWidth - activeLabel.offsetWidth) / 2;
+
+  progressWrap.scrollTo({
+    left: Math.max(0, centeredLeft),
+    behavior: "smooth",
+  });
 }
 
 function isStepComplete(step) {

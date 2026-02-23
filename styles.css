@@ -11,7 +11,7 @@
   /* Light editorial theme */
   --text: #1a1a1a;
   --text-light: #555555;
-  --text-muted: #999999;
+  --text-muted: #888888;
   --bg: #faf9f7;
   --surface: #ffffff;
   --sidebar-bg: #f4f3f0;
@@ -24,12 +24,15 @@
   --rule-bg: #eeecea;
   --rule-text: #666660;
   --rule-accent: #999990;
-  --font-size-xs: 11px;
-  --font-size-sm: 13px;
-  --font-size-base: 15px;
+  /* Type scale — 4 distinct levels */
+  --font-size-micro: 11px; /* chrome: badges, progress tabs, hints */
+  --font-size-xs: 12px; /* secondary labels, chips */
+  --font-size-sm: 14px; /* body, field values, toggle prompts */
+  --font-size-base: 16px; /* primary inputs */
+  --font-size-md: 19px; /* step title desktop */
   --font-weight-label: 600;
   --col-left: 22%;
-  --col-gap: 52px;
+  --col-gap: 40px;
 }
 
 body {
@@ -37,15 +40,15 @@ body {
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
-  padding: 0 0 80px;
+  padding: 0 0 48px;
 }
 
 /* ── Page header ── */
 header {
   border-bottom: var(--border);
-  padding: 20px var(--col-gap);
+  padding: 11px var(--col-gap);
   margin-bottom: 0;
-  max-width: 1200px;
+  max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
   width: 100%;
@@ -55,7 +58,7 @@ header {
   gap: 12px;
 }
 .header-logo {
-  height: 32px;
+  height: 26px;
   width: auto;
 }
 header h1 {
@@ -72,11 +75,11 @@ header h1 {
 }
 
 .mode-switch-label {
-  font-size: 10px;
+  font-size: var(--font-size-micro);
   text-transform: uppercase;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.4px;
   color: var(--text-muted);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   text-align: right;
   font-family: inherit;
 }
@@ -93,8 +96,8 @@ header h1 {
   border-right: var(--border-light);
   background: #fff;
   color: var(--text-muted);
-  padding: 10px 12px;
-  font-size: 12px;
+  padding: 7px 12px;
+  font-size: 13px;
   font-weight: var(--font-weight-label);
   letter-spacing: 0.4px;
   cursor: pointer;
@@ -115,14 +118,14 @@ header h1 {
   display: block;
   text-transform: uppercase;
   letter-spacing: 0.9px;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   color: var(--text-light);
 }
 
 .mode-desc {
   display: block;
-  margin-top: 4px;
-  font-size: 11px;
+  margin-top: 2px;
+  font-size: var(--font-size-micro);
   letter-spacing: 0;
   text-transform: none;
   color: var(--text-muted);
@@ -167,9 +170,9 @@ body.mode-general #step-5 {
 /* ── Page footer ── */
 footer {
   border-top: var(--border-light);
-  padding: 20px var(--col-gap);
-  margin-top: 60px;
-  max-width: 1200px;
+  padding: 12px var(--col-gap);
+  margin-top: 32px;
+  max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
   width: 100%;
@@ -193,11 +196,11 @@ footer a:hover {
 
 /* ── Progress bar ── */
 .progress-wrap {
-  max-width: 1200px;
+  max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
   border-bottom: var(--border-light);
-  padding: 14px var(--col-gap);
+  padding: 7px var(--col-gap);
   display: flex;
   align-items: center;
   gap: 24px;
@@ -216,11 +219,11 @@ footer a:hover {
   background: none;
   flex: 1;
   text-align: left;
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-micro);
   font-weight: var(--font-weight-label);
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.9px;
   padding: 4px 10px;
   white-space: nowrap;
   overflow: hidden;
@@ -237,6 +240,7 @@ footer a:hover {
 .progress-label.active {
   color: var(--text);
   background: #e8e6e2;
+  font-size: 12px;
 }
 .progress-label.done {
   color: var(--success);
@@ -249,7 +253,7 @@ footer a:hover {
 .card {
   background: var(--surface);
   width: 100%;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0;
   border: none;
@@ -283,33 +287,35 @@ footer a:hover {
   grid-row: 1 / span 100;
   position: sticky;
   top: 0;
-  padding: 40px 28px 40px var(--col-gap);
+  padding: 28px 20px 28px var(--col-gap);
   border-right: var(--border-light);
   min-height: 100%;
   background: var(--sidebar-bg);
 }
 .step-badge {
   display: block;
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-micro);
   font-weight: var(--font-weight-label);
-  letter-spacing: 1.5px;
+  letter-spacing: 1.8px;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin-bottom: 18px;
-  padding-bottom: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
   border-bottom: var(--border-light);
 }
 .step-title {
-  font-size: 18px;
+  font-size: var(--font-size-md);
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.25;
   color: var(--text);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  letter-spacing: -0.2px;
 }
 .step-desc {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   color: var(--text-light);
-  line-height: 1.75;
+  line-height: 1.65;
+  font-weight: 400;
 }
 
 /* Right content column — everything except the sidebar header */
@@ -319,15 +325,14 @@ footer a:hover {
   padding-right: var(--col-gap);
 }
 /* Top breathing room for first real child */
-.step.active > *:not(.step-header):first-child,
 .step.active > .step-header + * {
-  padding-top: 40px;
+  padding-top: 28px;
 }
 .step > .nav-row {
   padding-top: 8px;
-  padding-bottom: 40px;
+  padding-bottom: 24px;
   border-top: var(--border-faint);
-  margin-top: 12px;
+  margin-top: 8px;
 }
 /* Field spacing */
 .step.active > .field {
@@ -342,23 +347,23 @@ footer a:hover {
   padding-bottom: 0;
 }
 .step.active > .summary-row {
-  padding-top: 40px;
+  padding-top: 24px;
   padding-bottom: 0;
 }
 
 /* ── Form controls ── */
 .field {
-  margin-bottom: 26px;
+  margin-bottom: 18px;
 }
 
 label {
   display: block;
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-label);
-  letter-spacing: 1px;
+  font-size: var(--font-size-micro);
+  font-weight: 700;
+  letter-spacing: 1.2px;
   text-transform: uppercase;
-  color: var(--text);
-  margin-bottom: 8px;
+  color: var(--text-muted);
+  margin-bottom: 5px;
 }
 label .req {
   color: var(--danger);
@@ -368,10 +373,10 @@ label .hint {
   display: block;
   font-weight: 400;
   color: var(--text-muted);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-micro);
   text-transform: none;
   letter-spacing: 0;
-  margin-top: 3px;
+  margin-top: 2px;
 }
 
 input[type="text"],
@@ -380,10 +385,10 @@ input[type="datetime-local"],
 textarea,
 select {
   width: 100%;
-  padding: 10px 12px;
+  padding: 7px 10px;
   border: var(--border-light);
   border-radius: 0;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   color: var(--text);
   background: var(--input-bg);
   transition:
@@ -401,6 +406,14 @@ select:focus {
   background: #ffffff;
   box-shadow: inset 0 0 0 1px var(--text);
 }
+
+/* Placeholder — smaller and muted so it reads as guidance, not content */
+::placeholder {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 1; /* Firefox resets this */
+}
 input.readonly-styled {
   color: var(--text-muted);
   cursor: default;
@@ -413,10 +426,10 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 
 textarea {
-  min-height: 120px;
+  min-height: 90px;
 }
 textarea.tall {
-  min-height: 200px;
+  min-height: 160px;
 }
 
 /* ── Style guide rules (sidebar) ── */
@@ -434,13 +447,13 @@ textarea.tall {
 }
 .guide-rule-tick {
   flex-shrink: 0;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.6;
   /* keep emoji from scaling oddly */
   font-style: normal;
 }
 .guide-rule-text {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--rule-text);
   line-height: 1.6;
 }
@@ -451,10 +464,10 @@ textarea.tall {
 /* Toggle prompt question */
 .toggle-prompt {
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-label);
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  letter-spacing: 0;
   color: var(--text);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 /* Toggle switch */
@@ -556,7 +569,7 @@ textarea.tall {
 }
 .item-card {
   border-top: var(--border-light);
-  padding: 20px 14px 16px;
+  padding: 14px 12px 12px;
   position: relative;
   background: var(--sidebar-bg);
   margin-bottom: 2px;
@@ -591,7 +604,7 @@ textarea.tall {
 
 /* inner fields inside item-cards don't need extra left padding */
 .item-card .field {
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 .item-card label {
   font-size: var(--font-size-xs);
@@ -703,17 +716,17 @@ textarea.tall {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  background: white;
+  background: transparent;
 }
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 10px 20px;
+  padding: 9px 18px;
   border-radius: 0;
   font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-label);
-  letter-spacing: 1px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
   cursor: pointer;
   border: var(--border-light);
@@ -784,21 +797,19 @@ textarea.tall {
   opacity: 1;
 }
 
-/* ── Button row and nav row — yes-no-btn style ── */
-.button-row .btn,
-.nav-row .btn {
+/* ── Button row — plain style for icon/utility buttons ── */
+.button-row .btn {
   padding: 10px 20px;
   border: var(--border);
   background: var(--input-bg);
   color: var(--text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-label);
-  border-radius: 4px;
+  border-radius: 0;
   text-transform: none;
   letter-spacing: 0;
 }
-.button-row .btn:hover,
-.nav-row .btn:hover {
+.button-row .btn:hover {
   background: #f0ede9;
   border-color: var(--text);
 }
@@ -1570,144 +1581,289 @@ textarea.invalid {
   padding: 24px;
 }
 
-/* ── Responsive — collapse to single column below 800px ── */
-@media (max-width: 800px) {
+/* ── Responsive — collapse to single column below 730px ── */
+@media (max-width: 730px) {
+  :root {
+    --col-gap: 16px;
+  }
+
+  /* ── Header: force single compact row ── */
+  header {
+    padding: 9px 16px;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
+    border-bottom: var(--border);
+  }
+  .header-logo {
+    height: 22px;
+    flex-shrink: 0;
+  }
+  /* Site title hidden on mobile — redundant with logo */
+  header h1 {
+    display: none;
+  }
+  /* Mode switch sits inline right, compact */
+  .mode-switch-wrap {
+    width: auto;
+    min-width: 0;
+    flex: 1;
+    margin-left: auto;
+    margin-top: 0;
+  }
+  .mode-switch-label {
+    display: none;
+  }
+  .mode-switch {
+    width: 100%;
+    display: flex;
+  }
+  .mode-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 5px 8px;
+  }
+  /* Hide description text inside mode buttons on mobile */
+  .mode-btn .mode-desc {
+    display: none;
+  }
+  .mode-name {
+    font-size: var(--font-size-micro);
+    letter-spacing: 0.6px;
+  }
+
+  /* ── Progress bar: readable and swipe-friendly ── */
+  .progress-wrap {
+    padding: 6px 10px;
+    gap: 0;
+    border-bottom: var(--border-light);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .progress-wrap::-webkit-scrollbar {
+    display: none;
+  }
+  .progress-labels {
+    min-width: max-content;
+    flex-wrap: nowrap;
+  }
+  .progress-label {
+    flex: 0 0 auto;
+    min-width: 92px;
+    font-size: var(--font-size-micro);
+    padding: 7px 10px;
+    letter-spacing: 0.5px;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: nowrap;
+  }
+  .progress-label.done {
+    color: var(--success);
+    background: #edf6f1;
+  }
+  .progress-label.active {
+    font-size: var(--font-size-micro);
+    flex: 0 0 auto;
+    padding: 7px 10px;
+  }
+
+  /* ── Step layout: single column ── */
   .step.active {
     display: block;
+    padding-bottom: 72px;
   }
+
+  /* Step header: stacked for readability */
   .step-header {
     position: static;
-    padding: 24px 20px 20px;
+    padding: 12px 16px;
     border-right: none;
     border-bottom: var(--border-light);
     background: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    flex-wrap: nowrap;
   }
+  .step-badge {
+    font-size: var(--font-size-micro);
+    letter-spacing: 1.2px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .step-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0px;
+    flex: 1;
+    margin-bottom: 0;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: clip;
+  }
+  .step-desc {
+    display: block;
+    font-size: var(--font-size-micro);
+    line-height: 1.5;
+  }
+
+  /* ── Content column ── */
   .step.active > *:not(.step-header) {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 16px;
+    padding-right: 16px;
     grid-column: unset;
   }
   .step.active > .step-header + * {
-    padding-top: 24px;
+    padding-top: 18px;
   }
+
+  /* ── Fixed bottom nav: Back small left, Next full-width right ── */
   .step > .nav-row {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100%;
-    padding: 12px 20px !important;
+    padding: 8px 12px !important;
+    background: var(--surface);
     border-top: var(--border-light);
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.07);
     z-index: 100;
     margin: 0;
     gap: 8px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
     box-sizing: border-box;
   }
-  .step.active {
-    padding-bottom: 100px;
-  }
-  .progress-labels {
-    display: flex;
-    gap: 0;
-    flex: 1;
-  }
-  .progress-label {
-    flex: 1;
-    font-size: 10px;
-    padding: 3px 6px;
+  /* Back : small, ghost, left-aligned */
+  .step > .nav-row .btn-ghost {
+    flex: 0 0 auto;
+    min-height: 44px;
+    min-width: 64px;
+    font-size: 12px;
     letter-spacing: 0.4px;
+    padding: 8px 12px;
+    justify-content: center;
+    border-color: var(--border-light);
+    color: var(--text-muted);
   }
-  header {
-    padding: 14px 20px;
-    flex-wrap: wrap;
-  }
-  .header-logo {
-    height: 24px;
-  }
-  .mode-switch-wrap {
-    width: 100%;
-    min-width: 0;
-  }
-  .mode-switch-label {
-    text-align: left;
-  }
-  .mode-switch {
-    width: 100%;
-  }
-  .mode-btn {
+  /* Next: grows to fill remaining space, prominent */
+  .step > .nav-row .btn-primary {
     flex: 1;
-    min-width: 0;
-    padding: 8px 10px;
-  }
-  .mode-desc {
-    font-size: 10px;
-  }
-  footer {
-    padding: 14px 20px;
-    margin-top: 40px;
-  }
-  .progress-wrap {
-    padding: 8px 20px;
-    gap: 12px;
+    min-height: 44px;
+    font-size: 13px;
+    letter-spacing: 0.4px;
+    padding: 10px 16px;
+    justify-content: center;
+    font-weight: 700;
   }
 
-  /* TV Monitor responsive */
+  /* ── Inputs: 16px prevents iOS zoom, placeholder smaller ── */
+  input[type="text"],
+  input[type="date"],
+  input[type="datetime-local"],
+  textarea,
+  select {
+    font-size: 16px;
+  }
+  ::placeholder {
+    font-size: 14px;
+  }
+
+  /* Labels legible on small screens */
+  label {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  /* Field spacing */
+  .field {
+    margin-bottom: 16px;
+  }
+
+  /* ── Footer ── */
+  footer {
+    padding: 10px 16px;
+    margin-top: 28px;
+  }
+
+  /* ── TV Monitor responsive ── */
   .tv-monitor {
-    padding: 20px;
-    margin: 0 -20px 40px;
+    padding: 16px;
+    margin: 0 -16px 32px;
     border-radius: 0;
   }
-
   .tv-stand {
     display: none;
   }
-
   .tv-controls {
     position: static;
     transform: none;
-    margin-top: 20px;
+    margin-top: 16px;
     flex-direction: row;
     justify-content: space-between;
-    padding: 15px;
-    gap: 8px;
+    padding: 10px 12px;
+    gap: 6px;
   }
-
   .tv-btn {
     flex: 1;
-    padding: 10px 6px;
+    padding: 9px 4px;
     font-size: 9px;
-    letter-spacing: 0.5px;
-    gap: 4px;
+    letter-spacing: 0.4px;
+    gap: 3px;
     flex-direction: column;
   }
-
   .tv-btn svg {
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
   }
-
   .tv-monitor .output-block {
     font-size: 11px;
     max-height: 300px;
   }
-
   .tv-checklist {
     font-size: 11px;
   }
-
   .tv-checklist-header h2 {
     font-size: 14px;
   }
-
   .tv-checklist-body {
     font-size: 11px;
   }
+}
 
-  :root {
-    --col-gap: 20px;
+/* ── Tablet refinement ── */
+@media (min-width: 801px) and (max-width: 1100px) {
+  .progress-wrap {
+    padding: 6px 20px;
+    gap: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .progress-wrap::-webkit-scrollbar {
+    height: 0;
+  }
+  .progress-labels {
+    min-width: max-content;
+  }
+  .progress-label {
+    min-width: 130px;
+    padding: 6px 10px;
+  }
+
+  .step-header {
+    padding: 22px 16px 22px 20px;
+  }
+  .step-title {
+    font-size: 17px;
+  }
+  .step-desc {
+    font-size: var(--font-size-sm);
+    line-height: 1.55;
   }
 }
