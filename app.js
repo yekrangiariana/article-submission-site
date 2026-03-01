@@ -363,9 +363,6 @@ function goTo(target) {
   const targetEl = document.getElementById(`step-${normalizedTarget}`);
   if (!targetEl) return;
 
-  // Close checklist modal when navigating
-  closeChecklistModal();
-
   if (currentEl) currentEl.classList.remove("active");
   currentStep = normalizedTarget;
   visitedSteps.add(normalizedTarget);
@@ -443,9 +440,6 @@ function resetForm() {
   window._generatedData = null;
   const outputBlock = document.getElementById("outputBlock");
   if (outputBlock) outputBlock.textContent = "";
-  const checklistBody = document.getElementById("checklistModalBody");
-  if (checklistBody) checklistBody.innerHTML = "";
-  closeChecklistModal();
 
   refreshDate();
   renderProgress();
@@ -941,9 +935,6 @@ function buildOutput() {
   window._generatedMd = md;
   window._generatedData = d;
 
-  // Build and inject checklist into modal
-  buildChecklist(d);
-
   // HTML-escape for safe display
   const escaped = md
     .replace(/&/g, "&amp;")
@@ -951,160 +942,6 @@ function buildOutput() {
     .replace(/>/g, "&gt;");
 
   document.getElementById("outputBlock").innerHTML = escaped;
-}
-
-function buildChecklist(d) {
-  const modalBody = document.getElementById("checklistModalBody");
-  if (!modalBody) return;
-
-  // Helper to get text excerpt
-  const excerpt = (text, maxLen = 80) => {
-    if (!text) return "(empty)";
-    text = text.substring(0, maxLen);
-    if (text.length === maxLen) text += "…";
-    return text;
-  };
-
-  // Define grouped quality checks
-  const groups =
-    d.mode === MODES.GENERAL
-      ? [
-          {
-            title: "TITLE",
-            step: 1,
-            instance: d.title || "(empty)",
-            checks: [{ rule: "Clear and specific" }],
-          },
-          {
-            title: "DESCRIPTION",
-            step: 1,
-            instance: excerpt(d.description),
-            checks: [{ rule: "Adds context beyond title" }],
-          },
-          {
-            title: "TAXONOMY",
-            step: 2,
-            instance: `Categories: ${d.categories.join(", ") || "(none)"} | Tags: ${d.tags.join(", ") || "(none)"}`,
-            checks: [{ rule: "Categories/tags reflect story focus" }],
-          },
-          {
-            title: "CONTENT",
-            step: 3,
-            instance: excerpt(d.content),
-            checks: [{ rule: "Proofread and ready to publish" }],
-          },
-        ]
-      : [
-          {
-            title: "TITLE",
-            step: 1,
-            instance: d.title || "(empty)",
-            checks: [
-              { rule: "Ends with question mark (?)" },
-              { rule: "Uses sentence case" },
-              { rule: "Avoids contractions" },
-            ],
-          },
-          {
-            title: "DESCRIPTION",
-            step: 1,
-            instance: excerpt(d.description),
-            checks: [{ rule: "Does not repeat title" }],
-          },
-          {
-            title: "CONTENT",
-            step: 3,
-            instance: excerpt(d.content),
-            checks: [
-              { rule: "Avoids contractions" },
-              { rule: "Uses single quotes" },
-            ],
-          },
-          {
-            title: "QUOTES",
-            step: 4,
-            instance:
-              d.quotes.length === 0
-                ? "(no quotes)"
-                : d.quotes.map((q) => q.attribute).join(" | "),
-            checks: [
-              { rule: "Attributes are two-word labels" },
-              { rule: "Uses present tense or date" },
-            ],
-          },
-          {
-            title: "QUIZ",
-            step: 5,
-            instance:
-              d.quiz.length === 0
-                ? "(no quiz)"
-                : `${d.quiz.length} question${d.quiz.length > 1 ? "s" : ""}`,
-            checks: [
-              { rule: "Questions are present" },
-              { rule: "All answers provided" },
-            ],
-          },
-        ];
-
-  // Generate grouped checklist HTML
-  const groupsHTML = groups
-    .map((group) => {
-      const checksHTML = group.checks
-        .map(
-          (check) => `
-        <label class="checklist-check-label">
-          <input type="checkbox" class="checklist-check" />
-          <span>${check.rule}</span>
-        </label>
-      `,
-        )
-        .join("");
-
-      return `
-      <div class="checklist-group">
-        <div class="checklist-group-header">
-          <span class="checklist-group-title">${group.title}</span>
-          <button type="button" class="checklist-edit" onclick="goTo(${group.step})">EDIT →</button>
-        </div>
-        <div class="checklist-checks">
-          ${checksHTML}
-        </div>
-        <div class="checklist-instance">${group.instance}</div>
-      </div>
-    `;
-    })
-    .join("");
-
-  modalBody.innerHTML = `
-    <div class="checklist-list">
-      ${groupsHTML}
-    </div>
-  `;
-}
-
-function openChecklistModal() {
-  if (actionModalTimer) {
-    clearTimeout(actionModalTimer);
-    actionModalTimer = null;
-  }
-  const screen = document.querySelector(".tv-screen");
-  screen.classList.add("channel-change");
-
-  setTimeout(() => {
-    document.getElementById("actionModal").style.display = "none";
-    document.getElementById("checklistModal").style.display = "block";
-    screen.classList.remove("channel-change");
-  }, 400);
-}
-
-function closeChecklistModal() {
-  const screen = document.querySelector(".tv-screen");
-  screen.classList.add("channel-change");
-
-  setTimeout(() => {
-    document.getElementById("checklistModal").style.display = "none";
-    screen.classList.remove("channel-change");
-  }, 400);
 }
 
 function openActionModal(message, title = "System Message", timeout = 2500) {
@@ -1123,7 +960,6 @@ function openActionModal(message, title = "System Message", timeout = 2500) {
   screen.classList.add("channel-change");
 
   setTimeout(() => {
-    document.getElementById("checklistModal").style.display = "none";
     document.getElementById("actionModal").style.display = "block";
     screen.classList.remove("channel-change");
   }, 400);
@@ -1202,3 +1038,171 @@ function showToast(msg) {
   t.classList.add("show");
   setTimeout(() => t.classList.remove("show"), 2500);
 }
+
+// ─────────────────────────────────────────────
+//  GitHub Submission Configuration
+// ─────────────────────────────────────────────
+const GITHUB_CONFIG = {
+  // Repository information - update these for your site
+  owner: "yekrangiariana",
+  repo: "un-aligned-hugo",
+
+  // Content paths in the Hugo site
+  contentPaths: {
+    general: "content/posts",
+    essentials: "content/essentials",
+  },
+
+  // Labels for GitHub issues
+  labels: {
+    pending: "submission:pending",
+    general: "type:article",
+    essentials: "type:essentials",
+  },
+};
+
+// ─────────────────────────────────────────────
+//  Submit Modal
+// ─────────────────────────────────────────────
+function openSubmitModal() {
+  if (!window._generatedMd) {
+    openActionModal(
+      "Please complete all steps before submitting.",
+      "Submit",
+      2800,
+    );
+    return;
+  }
+
+  document.getElementById("submitModal").style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+function closeSubmitModal() {
+  document.getElementById("submitModal").style.display = "none";
+  document.body.style.overflow = "";
+}
+
+// ─────────────────────────────────────────────
+//  Success Modal
+// ─────────────────────────────────────────────
+function showSuccessModal(issueUrl, message) {
+  closeSubmitModal();
+
+  const detailEl = document.getElementById("success-detail");
+  if (detailEl) detailEl.textContent = message || "";
+
+  const linkEl = document.getElementById("view-submission-link");
+  if (linkEl) {
+    if (issueUrl) {
+      linkEl.href = issueUrl;
+      linkEl.style.display = "";
+    } else {
+      linkEl.style.display = "none";
+    }
+  }
+
+  document.getElementById("successModal").style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+function closeSuccessModal() {
+  document.getElementById("successModal").style.display = "none";
+  document.body.style.overflow = "";
+  resetForm();
+}
+
+// ─────────────────────────────────────────────
+//  GitHub Issue Submission
+// ─────────────────────────────────────────────
+function buildIssueBody(d) {
+  const mode =
+    d.mode === MODES.GENERAL ? "General Article" : "Essentials Story";
+  const date = new Date().toISOString().split("T")[0];
+
+  let body = `## Article Submission\n\n`;
+  body += `| Field | Value |\n`;
+  body += `|-------|-------|\n`;
+  body += `| **Type** | ${mode} |\n`;
+  body += `| **Title** | ${d.title} |\n`;
+  body += `| **Slug** | ${d.slug} |\n`;
+  body += `| **Publication Date** | ${d.date} |\n`;
+  body += `| **Authors** | ${d.authors.join(", ")} |\n`;
+
+  if (d.categories.length) {
+    body += `| **Categories** | ${d.categories.join(", ")} |\n`;
+  }
+  if (d.tags.length) {
+    body += `| **Tags** | ${d.tags.join(", ")} |\n`;
+  }
+
+  body += `| **Submission Date** | ${date} |\n`;
+
+  body += `\n### Summary\n\n${d.description}\n\n`;
+
+  body += `---\n\n`;
+  body += `<details>\n<summary>📄 Click to expand Markdown file content</summary>\n\n`;
+  body += "```markdown\n";
+  body += window._generatedMd;
+  body += "\n```\n\n";
+  body += `</details>\n\n`;
+
+  body += `---\n\n`;
+  body += `### For Editors\n\n`;
+  body += `To approve this submission, use the GitHub Action workflow or manually:\n\n`;
+  body += `1. Copy the markdown content above\n`;
+  body += `2. Create a new file at \`${GITHUB_CONFIG.contentPaths[d.mode === MODES.GENERAL ? "general" : "essentials"]}/${d.slug}.md\`\n`;
+  body += `3. Commit and close this issue\n`;
+
+  return body;
+}
+
+function submitViaGitHub() {
+  if (!window._generatedMd || !window._generatedData) {
+    openActionModal(
+      "No generated content. Please complete the form.",
+      "Error",
+      2800,
+    );
+    return;
+  }
+
+  const d = window._generatedData;
+  const prefix = d.mode === MODES.GENERAL ? "Article" : "Essentials";
+  const labels = [
+    GITHUB_CONFIG.labels.pending,
+    d.mode === MODES.GENERAL
+      ? GITHUB_CONFIG.labels.general
+      : GITHUB_CONFIG.labels.essentials,
+  ].join(",");
+
+  const title = `[${prefix}] ${d.title}`;
+  const body = buildIssueBody(d);
+
+  const url =
+    `https://github.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/issues/new?` +
+    `title=${encodeURIComponent(title)}&` +
+    `body=${encodeURIComponent(body)}&` +
+    `labels=${encodeURIComponent(labels)}`;
+
+  closeSubmitModal();
+  openActionModal("Opening GitHub...", "Submit", 1500);
+
+  // Open in new tab
+  window.open(url, "_blank");
+}
+
+// Close modals on escape key or background click
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeSubmitModal();
+    closeSuccessModal();
+  }
+});
+
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("modal-overlay")) {
+    closeSubmitModal();
+    closeSuccessModal();
+  }
+});
